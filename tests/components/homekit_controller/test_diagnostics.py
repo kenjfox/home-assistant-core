@@ -28,6 +28,7 @@ async def test_config_entry(hass: HomeAssistant, hass_client: ClientSession, utc
             "version": 1,
             "data": {"AccessoryPairingID": "00:00:00:00:00:00"},
         },
+        "config-num": 0,
         "entity-map": [
             {
                 "aid": 1,
@@ -151,7 +152,7 @@ async def test_config_entry(hass: HomeAssistant, hass_client: ClientSession, utc
                     },
                     {
                         "iid": 13,
-                        "type": "4aaaf940-0dec-11e5-b939-0800200c9a66",
+                        "type": "4AAAF940-0DEC-11E5-B939-0800200C9A66",
                         "characteristics": [
                             {
                                 "type": "4AAAF942-0DEC-11E5-B939-0800200C9A66",
@@ -235,28 +236,6 @@ async def test_config_entry(hass: HomeAssistant, hass_client: ClientSession, utc
                 "hw_version": "",
                 "entities": [
                     {
-                        "original_name": "Koogeek-LS1-20833F",
-                        "disabled": False,
-                        "disabled_by": None,
-                        "entity_category": None,
-                        "device_class": None,
-                        "original_device_class": None,
-                        "icon": None,
-                        "original_icon": None,
-                        "unit_of_measurement": None,
-                        "state": {
-                            "entity_id": "light.koogeek_ls1_20833f",
-                            "state": "off",
-                            "attributes": {
-                                "supported_color_modes": ["hs"],
-                                "friendly_name": "Koogeek-LS1-20833F",
-                                "supported_features": 17,
-                            },
-                            "last_changed": "2023-01-01T00:00:00+00:00",
-                            "last_updated": "2023-01-01T00:00:00+00:00",
-                        },
-                    },
-                    {
                         "device_class": None,
                         "disabled": False,
                         "disabled_by": None,
@@ -273,6 +252,28 @@ async def test_config_entry(hass: HomeAssistant, hass_client: ClientSession, utc
                             "last_changed": "2023-01-01T00:00:00+00:00",
                             "last_updated": "2023-01-01T00:00:00+00:00",
                             "state": "unknown",
+                        },
+                        "unit_of_measurement": None,
+                    },
+                    {
+                        "device_class": None,
+                        "disabled": False,
+                        "disabled_by": None,
+                        "entity_category": None,
+                        "icon": None,
+                        "original_device_class": None,
+                        "original_icon": None,
+                        "original_name": "Koogeek-LS1-20833F Light Strip",
+                        "state": {
+                            "attributes": {
+                                "friendly_name": "Koogeek-LS1-20833F Light Strip",
+                                "supported_color_modes": ["hs"],
+                                "supported_features": 0,
+                            },
+                            "entity_id": "light.koogeek_ls1_20833f_light_strip",
+                            "last_changed": "2023-01-01T00:00:00+00:00",
+                            "last_updated": "2023-01-01T00:00:00+00:00",
+                            "state": "off",
                         },
                         "unit_of_measurement": None,
                     },
@@ -299,6 +300,7 @@ async def test_device(hass: HomeAssistant, hass_client: ClientSession, utcnow):
             "version": 1,
             "data": {"AccessoryPairingID": "00:00:00:00:00:00"},
         },
+        "config-num": 0,
         "entity-map": [
             {
                 "aid": 1,
@@ -422,7 +424,7 @@ async def test_device(hass: HomeAssistant, hass_client: ClientSession, utcnow):
                     },
                     {
                         "iid": 13,
-                        "type": "4aaaf940-0dec-11e5-b939-0800200c9a66",
+                        "type": "4AAAF940-0DEC-11E5-B939-0800200C9A66",
                         "characteristics": [
                             {
                                 "type": "4AAAF942-0DEC-11E5-B939-0800200C9A66",
@@ -505,28 +507,6 @@ async def test_device(hass: HomeAssistant, hass_client: ClientSession, utcnow):
             "hw_version": "",
             "entities": [
                 {
-                    "original_name": "Koogeek-LS1-20833F",
-                    "disabled": False,
-                    "disabled_by": None,
-                    "entity_category": None,
-                    "device_class": None,
-                    "original_device_class": None,
-                    "icon": None,
-                    "original_icon": None,
-                    "unit_of_measurement": None,
-                    "state": {
-                        "entity_id": "light.koogeek_ls1_20833f",
-                        "state": "off",
-                        "attributes": {
-                            "supported_color_modes": ["hs"],
-                            "friendly_name": "Koogeek-LS1-20833F",
-                            "supported_features": 17,
-                        },
-                        "last_changed": "2023-01-01T00:00:00+00:00",
-                        "last_updated": "2023-01-01T00:00:00+00:00",
-                    },
-                },
-                {
                     "device_class": None,
                     "disabled": False,
                     "disabled_by": None,
@@ -536,11 +516,35 @@ async def test_device(hass: HomeAssistant, hass_client: ClientSession, utcnow):
                     "original_icon": None,
                     "original_name": "Koogeek-LS1-20833F Identify",
                     "state": {
-                        "attributes": {"friendly_name": "Koogeek-LS1-20833F Identify"},
+                        "attributes": {
+                            "friendly_name": "Koogeek-LS1-20833F " "Identify"
+                        },
                         "entity_id": "button.koogeek_ls1_20833f_identify",
                         "last_changed": "2023-01-01T00:00:00+00:00",
                         "last_updated": "2023-01-01T00:00:00+00:00",
                         "state": "unknown",
+                    },
+                    "unit_of_measurement": None,
+                },
+                {
+                    "device_class": None,
+                    "disabled": False,
+                    "disabled_by": None,
+                    "entity_category": None,
+                    "icon": None,
+                    "original_device_class": None,
+                    "original_icon": None,
+                    "original_name": "Koogeek-LS1-20833F Light Strip",
+                    "state": {
+                        "attributes": {
+                            "friendly_name": "Koogeek-LS1-20833F Light Strip",
+                            "supported_color_modes": ["hs"],
+                            "supported_features": 0,
+                        },
+                        "entity_id": "light.koogeek_ls1_20833f_light_strip",
+                        "last_changed": "2023-01-01T00:00:00+00:00",
+                        "last_updated": "2023-01-01T00:00:00+00:00",
+                        "state": "off",
                     },
                     "unit_of_measurement": None,
                 },

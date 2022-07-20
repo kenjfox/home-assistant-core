@@ -8,7 +8,13 @@ from homeassistant.components.unifi.const import (
 )
 from homeassistant.components.unifi.device_tracker import CLIENT_TRACKER, DEVICE_TRACKER
 from homeassistant.components.unifi.sensor import RX_SENSOR, TX_SENSOR, UPTIME_SENSOR
-from homeassistant.components.unifi.switch import BLOCK_SWITCH, DPI_SWITCH, POE_SWITCH
+from homeassistant.components.unifi.switch import (
+    BLOCK_SWITCH,
+    DPI_SWITCH,
+    OUTLET_SWITCH,
+    POE_SWITCH,
+)
+from homeassistant.components.unifi.update import DEVICE_UPDATE
 from homeassistant.const import Platform
 
 from .test_controller import setup_unifi_integration
@@ -117,7 +123,7 @@ async def test_entry_diagnostics(hass, hass_client, aioclient_mock):
         "config": {
             "data": {
                 "controller": REDACTED,
-                "host": "1.2.3.4",
+                "host": REDACTED,
                 "password": REDACTED,
                 "port": 1234,
                 "site": "site_id",
@@ -154,6 +160,10 @@ async def test_entry_diagnostics(hass, hass_client, aioclient_mock):
                 BLOCK_SWITCH: ["00:00:00:00:00:00"],
                 DPI_SWITCH: ["5f976f4ae3c58f018ec7dff6"],
                 POE_SWITCH: ["00:00:00:00:00:00"],
+                OUTLET_SWITCH: [],
+            },
+            str(Platform.UPDATE): {
+                DEVICE_UPDATE: ["00:00:00:00:00:01"],
             },
         },
         "clients": {

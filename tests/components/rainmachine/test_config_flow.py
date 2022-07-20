@@ -11,12 +11,12 @@ from homeassistant.const import CONF_IP_ADDRESS, CONF_PASSWORD, CONF_PORT, CONF_
 from homeassistant.helpers import entity_registry as er
 
 
-async def test_duplicate_error(hass, config, config_entry, setup_rainmachine):
+async def test_duplicate_error(hass, config, config_entry):
     """Test that errors are shown when duplicates are added."""
     result = await hass.config_entries.flow.async_init(
         DOMAIN, context={"source": config_entries.SOURCE_USER}, data=config
     )
-    assert result["type"] == data_entry_flow.RESULT_TYPE_ABORT
+    assert result["type"] == data_entry_flow.FlowResultType.ABORT
     assert result["reason"] == "already_configured"
 
 
@@ -95,13 +95,13 @@ async def test_options_flow(hass, config, config_entry):
     ):
         await hass.config_entries.async_setup(config_entry.entry_id)
         result = await hass.config_entries.options.async_init(config_entry.entry_id)
-        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["type"] == data_entry_flow.FlowResultType.FORM
         assert result["step_id"] == "init"
 
         result = await hass.config_entries.options.async_configure(
             result["flow_id"], user_input={CONF_ZONE_RUN_TIME: 600}
         )
-        assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
+        assert result["type"] == data_entry_flow.FlowResultType.CREATE_ENTRY
         assert config_entry.options == {CONF_ZONE_RUN_TIME: 600}
 
 
@@ -112,7 +112,7 @@ async def test_show_form(hass):
         context={"source": config_entries.SOURCE_USER},
         data=None,
     )
-    assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+    assert result["type"] == data_entry_flow.FlowResultType.FORM
     assert result["step_id"] == "user"
 
 
@@ -123,8 +123,8 @@ async def test_step_user(hass, config, setup_rainmachine):
         context={"source": config_entries.SOURCE_USER},
         data=config,
     )
-    assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
-    assert result["title"] == "My RainMachine"
+    assert result["type"] == data_entry_flow.FlowResultType.CREATE_ENTRY
+    assert result["title"] == "12345"
     assert result["data"] == {
         CONF_IP_ADDRESS: "192.168.1.100",
         CONF_PASSWORD: "password",
@@ -149,6 +149,7 @@ async def test_step_homekit_zeroconf_ip_already_exists(
             context={"source": source},
             data=zeroconf.ZeroconfServiceInfo(
                 host="192.168.1.100",
+                addresses=["192.168.1.100"],
                 hostname="mock_hostname",
                 name="mock_name",
                 port=None,
@@ -157,7 +158,7 @@ async def test_step_homekit_zeroconf_ip_already_exists(
             ),
         )
 
-    assert result["type"] == data_entry_flow.RESULT_TYPE_ABORT
+    assert result["type"] == data_entry_flow.FlowResultType.ABORT
     assert result["reason"] == "already_configured"
 
 
@@ -174,6 +175,7 @@ async def test_step_homekit_zeroconf_ip_change(hass, client, config_entry, sourc
             context={"source": source},
             data=zeroconf.ZeroconfServiceInfo(
                 host="192.168.1.2",
+                addresses=["192.168.1.2"],
                 hostname="mock_hostname",
                 name="mock_name",
                 port=None,
@@ -182,7 +184,7 @@ async def test_step_homekit_zeroconf_ip_change(hass, client, config_entry, sourc
             ),
         )
 
-    assert result["type"] == data_entry_flow.RESULT_TYPE_ABORT
+    assert result["type"] == data_entry_flow.FlowResultType.ABORT
     assert result["reason"] == "already_configured"
     assert config_entry.data[CONF_IP_ADDRESS] == "192.168.1.2"
 
@@ -202,6 +204,7 @@ async def test_step_homekit_zeroconf_new_controller_when_some_exist(
             context={"source": source},
             data=zeroconf.ZeroconfServiceInfo(
                 host="192.168.1.100",
+                addresses=["192.168.1.100"],
                 hostname="mock_hostname",
                 name="mock_name",
                 port=None,
@@ -210,7 +213,7 @@ async def test_step_homekit_zeroconf_new_controller_when_some_exist(
             ),
         )
 
-    assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+    assert result["type"] == data_entry_flow.FlowResultType.FORM
     assert result["step_id"] == "user"
 
     with patch(
@@ -228,8 +231,8 @@ async def test_step_homekit_zeroconf_new_controller_when_some_exist(
         )
         await hass.async_block_till_done()
 
-    assert result2["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
-    assert result2["title"] == "My RainMachine"
+    assert result2["type"] == data_entry_flow.FlowResultType.CREATE_ENTRY
+    assert result2["title"] == "12345"
     assert result2["data"] == {
         CONF_IP_ADDRESS: "192.168.1.100",
         CONF_PASSWORD: "password",
@@ -249,6 +252,7 @@ async def test_discovery_by_homekit_and_zeroconf_same_time(hass, client):
             context={"source": config_entries.SOURCE_ZEROCONF},
             data=zeroconf.ZeroconfServiceInfo(
                 host="192.168.1.100",
+                addresses=["192.168.1.100"],
                 hostname="mock_hostname",
                 name="mock_name",
                 port=None,
@@ -257,7 +261,7 @@ async def test_discovery_by_homekit_and_zeroconf_same_time(hass, client):
             ),
         )
 
-    assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+    assert result["type"] == data_entry_flow.FlowResultType.FORM
     assert result["step_id"] == "user"
 
     with patch(
@@ -268,6 +272,7 @@ async def test_discovery_by_homekit_and_zeroconf_same_time(hass, client):
             context={"source": config_entries.SOURCE_HOMEKIT},
             data=zeroconf.ZeroconfServiceInfo(
                 host="192.168.1.100",
+                addresses=["192.168.1.100"],
                 hostname="mock_hostname",
                 name="mock_name",
                 port=None,
@@ -276,5 +281,5 @@ async def test_discovery_by_homekit_and_zeroconf_same_time(hass, client):
             ),
         )
 
-    assert result2["type"] == data_entry_flow.RESULT_TYPE_ABORT
+    assert result2["type"] == data_entry_flow.FlowResultType.ABORT
     assert result2["reason"] == "already_in_progress"

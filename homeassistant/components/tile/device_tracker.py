@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from collections.abc import Awaitable, Callable
 import logging
-from typing import Any
 
 from pytile.tile import Tile
 
@@ -13,13 +12,14 @@ from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
 from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.typing import ConfigType
+from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
     DataUpdateCoordinator,
 )
 
-from .const import DATA_COORDINATOR, DATA_TILE, DOMAIN
+from . import TileData
+from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -39,14 +39,12 @@ async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     """Set up Tile device trackers."""
+    data: TileData = hass.data[DOMAIN][entry.entry_id]
+
     async_add_entities(
         [
-            TileDeviceTracker(
-                entry,
-                hass.data[DOMAIN][entry.entry_id][DATA_COORDINATOR][tile_uuid],
-                tile,
-            )
-            for tile_uuid, tile in hass.data[DOMAIN][entry.entry_id][DATA_TILE].items()
+            TileDeviceTracker(entry, data.coordinators[tile_uuid], tile)
+            for tile_uuid, tile in data.tiles.items()
         ]
     )
 
@@ -55,7 +53,7 @@ async def async_setup_scanner(
     hass: HomeAssistant,
     config: ConfigType,
     async_see: Callable[..., Awaitable[None]],
-    discovery_info: dict[str, Any] | None = None,
+    discovery_info: DiscoveryInfoType | None = None,
 ) -> bool:
     """Detect a legacy configuration and import it."""
     hass.async_create_task(
