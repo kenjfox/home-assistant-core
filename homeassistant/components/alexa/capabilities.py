@@ -5,12 +5,15 @@ import logging
 
 from homeassistant.components import (
     button,
+    climate,
     cover,
     fan,
+    humidifier,
     image_processing,
     input_button,
     input_number,
     light,
+    media_player,
     timer,
     vacuum,
 )
@@ -18,8 +21,6 @@ from homeassistant.components.alarm_control_panel import (
     AlarmControlPanelEntityFeature,
     CodeFormat,
 )
-import homeassistant.components.climate.const as climate
-import homeassistant.components.media_player.const as media_player
 from homeassistant.const import (
     ATTR_CODE_FORMAT,
     ATTR_SUPPORTED_FEATURES,
@@ -269,6 +270,7 @@ class Alexa(AlexaCapability):
     """
 
     supported_locales = {
+        "ar-SA",
         "de-DE",
         "en-AU",
         "en-CA",
@@ -277,10 +279,13 @@ class Alexa(AlexaCapability):
         "en-US",
         "es-ES",
         "es-MX",
+        "es-US",
         "fr-CA",
         "fr-FR",
+        "hi-IN",
         "it-IT",
         "ja-JP",
+        "pt-BR",
     }
 
     def name(self):
@@ -295,6 +300,7 @@ class AlexaEndpointHealth(AlexaCapability):
     """
 
     supported_locales = {
+        "ar-SA",
         "de-DE",
         "en-AU",
         "en-CA",
@@ -302,9 +308,14 @@ class AlexaEndpointHealth(AlexaCapability):
         "en-IN",
         "en-US",
         "es-ES",
+        "es-MX",
+        "es-US",
+        "fr-CA",
         "fr-FR",
+        "hi-IN",
         "it-IT",
         "ja-JP",
+        "pt-BR",
     }
 
     def __init__(self, hass, entity):
@@ -345,6 +356,7 @@ class AlexaPowerController(AlexaCapability):
     """
 
     supported_locales = {
+        "ar-SA",
         "de-DE",
         "en-AU",
         "en-CA",
@@ -352,9 +364,14 @@ class AlexaPowerController(AlexaCapability):
         "en-IN",
         "en-US",
         "es-ES",
+        "es-MX",
+        "es-US",
+        "fr-CA",
         "fr-FR",
+        "hi-IN",
         "it-IT",
         "ja-JP",
+        "pt-BR",
     }
 
     def name(self):
@@ -379,9 +396,11 @@ class AlexaPowerController(AlexaCapability):
             raise UnsupportedProperty(name)
 
         if self.entity.domain == climate.DOMAIN:
-            is_on = self.entity.state != climate.HVAC_MODE_OFF
+            is_on = self.entity.state != climate.HVACMode.OFF
         elif self.entity.domain == fan.DOMAIN:
             is_on = self.entity.state == fan.STATE_ON
+        elif self.entity.domain == humidifier.DOMAIN:
+            is_on = self.entity.state == humidifier.STATE_ON
         elif self.entity.domain == vacuum.DOMAIN:
             is_on = self.entity.state == vacuum.STATE_CLEANING
         elif self.entity.domain == timer.DOMAIN:
@@ -400,6 +419,7 @@ class AlexaLockController(AlexaCapability):
     """
 
     supported_locales = {
+        "ar-SA",
         "de-DE",
         "en-AU",
         "en-CA",
@@ -461,9 +481,14 @@ class AlexaSceneController(AlexaCapability):
         "en-IN",
         "en-US",
         "es-ES",
+        "es-MX",
+        "es-US",
+        "fr-CA",
         "fr-FR",
+        "hi-IN",
         "it-IT",
         "ja-JP",
+        "pt-BR",
     }
 
     def __init__(self, entity, supports_deactivation):
@@ -483,6 +508,7 @@ class AlexaBrightnessController(AlexaCapability):
     """
 
     supported_locales = {
+        "ar-SA",
         "de-DE",
         "en-AU",
         "en-CA",
@@ -490,6 +516,9 @@ class AlexaBrightnessController(AlexaCapability):
         "en-IN",
         "en-US",
         "es-ES",
+        "es-MX",
+        "es-US",
+        "fr-CA",
         "fr-FR",
         "hi-IN",
         "it-IT",
@@ -536,6 +565,9 @@ class AlexaColorController(AlexaCapability):
         "en-IN",
         "en-US",
         "es-ES",
+        "es-MX",
+        "es-US",
+        "fr-CA",
         "fr-FR",
         "hi-IN",
         "it-IT",
@@ -587,6 +619,9 @@ class AlexaColorTemperatureController(AlexaCapability):
         "en-IN",
         "en-US",
         "es-ES",
+        "es-MX",
+        "es-US",
+        "fr-CA",
         "fr-FR",
         "hi-IN",
         "it-IT",
@@ -635,9 +670,13 @@ class AlexaPercentageController(AlexaCapability):
         "en-IN",
         "en-US",
         "es-ES",
+        "es-US",
+        "fr-CA",
         "fr-FR",
+        "hi-IN",
         "it-IT",
         "ja-JP",
+        "pt-BR",
     }
 
     def name(self):
@@ -758,7 +797,24 @@ class AlexaPlaybackController(AlexaCapability):
     https://developer.amazon.com/docs/device-apis/alexa-playbackcontroller.html
     """
 
-    supported_locales = {"de-DE", "en-AU", "en-CA", "en-GB", "en-IN", "en-US", "fr-FR"}
+    supported_locales = {
+        "ar-SA",
+        "de-DE",
+        "en-AU",
+        "en-CA",
+        "en-GB",
+        "en-IN",
+        "en-US",
+        "es-ES",
+        "es-MX",
+        "es-US",
+        "fr-CA",
+        "fr-FR",
+        "hi-IN",
+        "it-IT",
+        "ja-JP",
+        "pt-BR",
+    }
 
     def name(self):
         """Return the Alexa API name of this interface."""
@@ -792,7 +848,24 @@ class AlexaInputController(AlexaCapability):
     https://developer.amazon.com/docs/device-apis/alexa-inputcontroller.html
     """
 
-    supported_locales = {"de-DE", "en-AU", "en-CA", "en-GB", "en-IN", "en-US"}
+    supported_locales = {
+        "ar-SA",
+        "de-DE",
+        "en-AU",
+        "en-CA",
+        "en-GB",
+        "en-IN",
+        "en-US",
+        "es-ES",
+        "es-MX",
+        "es-US",
+        "fr-CA",
+        "fr-FR",
+        "hi-IN",
+        "it-IT",
+        "ja-JP",
+        "pt-BR",
+    }
 
     def name(self):
         """Return the Alexa API name of this interface."""
@@ -830,6 +903,7 @@ class AlexaTemperatureSensor(AlexaCapability):
     """
 
     supported_locales = {
+        "ar-SA",
         "de-DE",
         "en-AU",
         "en-CA",
@@ -837,9 +911,14 @@ class AlexaTemperatureSensor(AlexaCapability):
         "en-IN",
         "en-US",
         "es-ES",
+        "es-MX",
+        "es-US",
+        "fr-CA",
         "fr-FR",
+        "hi-IN",
         "it-IT",
         "ja-JP",
+        "pt-BR",
     }
 
     def __init__(self, hass, entity):
@@ -901,11 +980,18 @@ class AlexaContactSensor(AlexaCapability):
         "de-DE",
         "en-AU",
         "en-CA",
+        "en-GB",
         "en-IN",
         "en-US",
         "es-ES",
+        "es-MX",
+        "es-US",
+        "fr-CA",
+        "fr-FR",
+        "hi-IN",
         "it-IT",
         "ja-JP",
+        "pt-BR",
     }
 
     def __init__(self, hass, entity):
@@ -949,9 +1035,15 @@ class AlexaMotionSensor(AlexaCapability):
         "de-DE",
         "en-AU",
         "en-CA",
+        "en-GB",
         "en-IN",
         "en-US",
         "es-ES",
+        "es-MX",
+        "es-US",
+        "fr-CA",
+        "fr-FR",
+        "hi-IN",
         "it-IT",
         "ja-JP",
         "pt-BR",
@@ -995,6 +1087,7 @@ class AlexaThermostatController(AlexaCapability):
     """
 
     supported_locales = {
+        "ar-SA",
         "de-DE",
         "en-AU",
         "en-CA",
@@ -1002,7 +1095,11 @@ class AlexaThermostatController(AlexaCapability):
         "en-IN",
         "en-US",
         "es-ES",
+        "es-MX",
+        "es-US",
+        "fr-CA",
         "fr-FR",
+        "hi-IN",
         "it-IT",
         "ja-JP",
         "pt-BR",
@@ -1125,6 +1222,8 @@ class AlexaPowerLevelController(AlexaCapability):
         "en-IN",
         "en-US",
         "es-ES",
+        "es-MX",
+        "fr-CA",
         "fr-FR",
         "it-IT",
         "ja-JP",
@@ -1258,10 +1357,13 @@ class AlexaModeController(AlexaCapability):
         "en-US",
         "es-ES",
         "es-MX",
+        "es-US",
         "fr-CA",
         "fr-FR",
+        "hi-IN",
         "it-IT",
         "ja-JP",
+        "pt-BR",
     }
 
     def __init__(self, entity, instance, non_controllable=False):
@@ -1303,6 +1405,12 @@ class AlexaModeController(AlexaCapability):
             mode = self.entity.attributes.get(fan.ATTR_PRESET_MODE, None)
             if mode in self.entity.attributes.get(fan.ATTR_PRESET_MODES, None):
                 return f"{fan.ATTR_PRESET_MODE}.{mode}"
+
+        # Humidifier mode
+        if self.instance == f"{humidifier.DOMAIN}.{humidifier.ATTR_MODE}":
+            mode = self.entity.attributes.get(humidifier.ATTR_MODE, None)
+            if mode in self.entity.attributes.get(humidifier.ATTR_AVAILABLE_MODES, []):
+                return f"{humidifier.ATTR_MODE}.{mode}"
 
         # Cover Position
         if self.instance == f"{cover.DOMAIN}.{cover.ATTR_POSITION}":
@@ -1357,6 +1465,20 @@ class AlexaModeController(AlexaCapability):
             if len(preset_modes) == 1:
                 self._resource.add_mode(
                     f"{fan.ATTR_PRESET_MODE}.{PRESET_MODE_NA}", [PRESET_MODE_NA]
+                )
+            return self._resource.serialize_capability_resources()
+
+        # Humidifier modes
+        if self.instance == f"{humidifier.DOMAIN}.{humidifier.ATTR_MODE}":
+            self._resource = AlexaModeResource([AlexaGlobalCatalog.SETTING_MODE], False)
+            modes = self.entity.attributes.get(humidifier.ATTR_AVAILABLE_MODES, [])
+            for mode in modes:
+                self._resource.add_mode(f"{humidifier.ATTR_MODE}.{mode}", [mode])
+            # Humidifiers or Fans with a single mode completely break Alexa discovery, add a
+            # fake preset (see issue #53832).
+            if len(modes) == 1:
+                self._resource.add_mode(
+                    f"{humidifier.ATTR_MODE}.{PRESET_MODE_NA}", [PRESET_MODE_NA]
                 )
             return self._resource.serialize_capability_resources()
 
@@ -1444,10 +1566,13 @@ class AlexaRangeController(AlexaCapability):
         "en-US",
         "es-ES",
         "es-MX",
+        "es-US",
         "fr-CA",
         "fr-FR",
+        "hi-IN",
         "it-IT",
         "ja-JP",
+        "pt-BR",
     }
 
     def __init__(self, entity, instance, non_controllable=False):
@@ -1498,6 +1623,12 @@ class AlexaRangeController(AlexaCapability):
                 return self.entity.attributes.get(fan.ATTR_PERCENTAGE)
             return 100 if self.entity.state == fan.STATE_ON else 0
 
+        # Humidifier target humidity
+        if self.instance == f"{humidifier.DOMAIN}.{humidifier.ATTR_HUMIDITY}":
+            # If the humidifier is turned off the target humidity attribute is not set.
+            # We return 0 to make clear we do not know the current value.
+            return self.entity.attributes.get(humidifier.ATTR_HUMIDITY, 0)
+
         # Input Number Value
         if self.instance == f"{input_number.DOMAIN}.{input_number.ATTR_VALUE}":
             return float(self.entity.state)
@@ -1534,6 +1665,17 @@ class AlexaRangeController(AlexaCapability):
                 # precision must be a divider of 100 and must be an integer; set step
                 # size to 1 for a consistent behavior except for on/off fans
                 precision=1 if percentage_step else 100,
+                unit=AlexaGlobalCatalog.UNIT_PERCENT,
+            )
+            return self._resource.serialize_capability_resources()
+
+        # Humidifier Target Humidity Resources
+        if self.instance == f"{humidifier.DOMAIN}.{humidifier.ATTR_HUMIDITY}":
+            self._resource = AlexaPresetResource(
+                labels=["Humidity", "Percentage", "Target humidity"],
+                min_value=self.entity.attributes.get(humidifier.ATTR_MIN_HUMIDITY, 10),
+                max_value=self.entity.attributes.get(humidifier.ATTR_MAX_HUMIDITY, 90),
+                precision=1,
                 unit=AlexaGlobalCatalog.UNIT_PERCENT,
             )
             return self._resource.serialize_capability_resources()
@@ -1662,6 +1804,22 @@ class AlexaRangeController(AlexaCapability):
             )
             return self._semantics.serialize_semantics()
 
+        # Target Humidity Percentage
+        if self.instance == f"{humidifier.DOMAIN}.{humidifier.ATTR_HUMIDITY}":
+            lower_labels = [AlexaSemantics.ACTION_LOWER]
+            raise_labels = [AlexaSemantics.ACTION_RAISE]
+            self._semantics = AlexaSemantics()
+            min_value = self.entity.attributes.get(humidifier.ATTR_MIN_HUMIDITY, 10)
+            max_value = self.entity.attributes.get(humidifier.ATTR_MAX_HUMIDITY, 90)
+
+            self._semantics.add_action_to_directive(
+                lower_labels, "SetRangeValue", {"rangeValue": min_value}
+            )
+            self._semantics.add_action_to_directive(
+                raise_labels, "SetRangeValue", {"rangeValue": max_value}
+            )
+            return self._semantics.serialize_semantics()
+
         return None
 
 
@@ -1689,8 +1847,10 @@ class AlexaToggleController(AlexaCapability):
         "en-US",
         "es-ES",
         "es-MX",
+        "es-US",
         "fr-CA",
         "fr-FR",
+        "hi-IN",
         "it-IT",
         "ja-JP",
         "pt-BR",
@@ -1751,6 +1911,7 @@ class AlexaChannelController(AlexaCapability):
     """
 
     supported_locales = {
+        "ar-SA",
         "de-DE",
         "en-AU",
         "en-CA",
@@ -1759,6 +1920,8 @@ class AlexaChannelController(AlexaCapability):
         "en-US",
         "es-ES",
         "es-MX",
+        "es-US",
+        "fr-CA",
         "fr-FR",
         "hi-IN",
         "it-IT",
@@ -1778,6 +1941,7 @@ class AlexaDoorbellEventSource(AlexaCapability):
     """
 
     supported_locales = {
+        "ar-SA",
         "de-DE",
         "en-AU",
         "en-CA",
@@ -1792,6 +1956,7 @@ class AlexaDoorbellEventSource(AlexaCapability):
         "hi-IN",
         "it-IT",
         "ja-JP",
+        "pt-BR",
     }
 
     def name(self):
@@ -1809,7 +1974,24 @@ class AlexaPlaybackStateReporter(AlexaCapability):
     https://developer.amazon.com/docs/device-apis/alexa-playbackstatereporter.html
     """
 
-    supported_locales = {"de-DE", "en-GB", "en-US", "es-MX", "fr-FR"}
+    supported_locales = {
+        "ar-SA",
+        "de-DE",
+        "en-AU",
+        "en-CA",
+        "en-GB",
+        "en-IN",
+        "en-US",
+        "es-ES",
+        "es-MX",
+        "es-US",
+        "fr-CA",
+        "fr-FR",
+        "hi-IN",
+        "it-IT",
+        "ja-JP",
+        "pt-BR",
+    }
 
     def name(self):
         """Return the Alexa API name of this interface."""
@@ -1847,7 +2029,24 @@ class AlexaSeekController(AlexaCapability):
     https://developer.amazon.com/docs/device-apis/alexa-seekcontroller.html
     """
 
-    supported_locales = {"de-DE", "en-GB", "en-US", "es-MX"}
+    supported_locales = {
+        "ar-SA",
+        "de-DE",
+        "en-AU",
+        "en-CA",
+        "en-GB",
+        "en-IN",
+        "en-US",
+        "es-ES",
+        "es-MX",
+        "es-US",
+        "fr-CA",
+        "fr-FR",
+        "hi-IN",
+        "it-IT",
+        "ja-JP",
+        "pt-BR",
+    }
 
     def name(self):
         """Return the Alexa API name of this interface."""
@@ -1923,7 +2122,24 @@ class AlexaEqualizerController(AlexaCapability):
     https://developer.amazon.com/en-US/docs/alexa/device-apis/alexa-equalizercontroller.html
     """
 
-    supported_locales = {"de-DE", "en-IN", "en-US", "es-ES", "it-IT", "ja-JP", "pt-BR"}
+    supported_locales = {
+        "de-DE",
+        "en-AU",
+        "en-CA",
+        "en-GB",
+        "en-IN",
+        "en-US",
+        "es-ES",
+        "es-MX",
+        "es-US",
+        "fr-CA",
+        "fr-FR",
+        "hi-IN",
+        "it-IT",
+        "ja-JP",
+        "pt-BR",
+    }
+
     VALID_SOUND_MODES = {
         "MOVIE",
         "MUSIC",
@@ -2015,6 +2231,7 @@ class AlexaCameraStreamController(AlexaCapability):
     """
 
     supported_locales = {
+        "ar-SA",
         "de-DE",
         "en-AU",
         "en-CA",
@@ -2022,6 +2239,9 @@ class AlexaCameraStreamController(AlexaCapability):
         "en-IN",
         "en-US",
         "es-ES",
+        "es-MX",
+        "es-US",
+        "fr-CA",
         "fr-FR",
         "hi-IN",
         "it-IT",
